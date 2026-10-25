@@ -57,7 +57,7 @@ Commodity contracts on NYMEX and ICE operate under different quoting conventions
 
 ```bash
 # Clone the repository
-git clone [https://github.com/](https://github.com/)<your-username>/refinery-crack-spread-analytics.git
+git clone https://github.com/Austinzhu0913/refinery-crack-spread-analytics.git
 cd refinery-crack-spread-analytics
 
 # Run baseline operational monitor

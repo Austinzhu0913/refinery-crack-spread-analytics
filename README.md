@@ -38,15 +38,17 @@ $$\text{Gross Margin}_{3:2:1} = \frac{2 \times P_{\text{Diesel}} + 1 \times P_{\
 ## 2. Quantitative Normalization & Units
 
 Commodity contracts on NYMEX and ICE operate under different quoting conventions. The engine handles automated unit harmonization across exchanges:
-* **Crude (Brent)**: Quoted in `USD/bbl`. Direct input.
-* **Refined Products (ULSD & RBOB)**: Quoted in `cents/gal` (`USd/gal`).
-* **Conversion Formula**:
-  $$P_{\text{bbl}} = \left( \frac{P_{\text{gal}}}{100} \right) \times 42$$
+- **Crude (Brent)**: Quoted in `USD/bbl`. Direct input.
+- **Refined Products (ULSD & RBOB)**: Quoted in `cents/gal` (`USd/gal`).
+- **Conversion Formula**:
+
+$$P_{\text{bbl}} = \left( \frac{P_{\text{gal}}}{100} \right) \times 42$$
 
 ---
 
 ## 3. Project Structure & Usage
 
+```text
 .
 ├── crack.py                     # Dual-mode analytics pipeline
 ├── crack_spread_baseline.png    # Equilibrium monitor output

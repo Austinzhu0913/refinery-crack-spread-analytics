@@ -45,7 +45,6 @@ Commodity contracts on NYMEX and ICE operate under different quoting conventions
 $$P_{\text{bbl}} = \left( \frac{P_{\text{gal}}}{100} \right) \times 42$$
 
 ---
-
 ## 3. Project Structure & Usage
 
 ```text
@@ -53,7 +52,7 @@ $$P_{\text{bbl}} = \left( \frac{P_{\text{gal}}}{100} \right) \times 42$$
 ├── crack.py                     # Dual-mode analytics pipeline
 ├── crack_spread_baseline.png    # Equilibrium monitor output
 ├── crack_spread_stress-test.png # Extreme shock stress-test output
-└── README.md                    # Methodology and desk documentation                 # Methodology and desk documentation
+└── README.md                    # Methodology and desk documentation
 
 ### Quickstart
 

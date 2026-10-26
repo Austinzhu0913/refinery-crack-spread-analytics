@@ -79,7 +79,6 @@ The 3:2:1 spread is an **indicative gross margin benchmark**. A physical trading
 ├── crack_spread_baseline.png    # Baseline equilibrium monitor output
 ├── crack_spread_stress-test.png # Extreme shock stress-test output
 └── README.md                    # Methodology and desk documentation
-
 ### Usage
 
 ```bash

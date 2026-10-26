@@ -17,14 +17,14 @@ $$\text{Gross Crack Margin}_{3:2:1} = \frac{2 \times P_{\text{ULSD}} + 1 \times 
 * **Middle Distillates (2 Barrels)**: NYMEX Ultra-Low Sulfur Diesel (`HO1 Comdty`).
 * **Light Distillates (1 Barrel)**: NYMEX Reformulated Blendstock for Oxygenate Blending (`XB1 Comdty`).
 
-'''
+```
 * +-----------------------------------------------------------------------------------------+
 |                                3:2:1 CRACK SPREAD ARCHITECTURE                          |
 |                                                                                         |
 |  [ 3 bbls ICE Brent Crude ]  ---> [ Refinery Conversion ] ---> [ 2 bbls NYMEX ULSD ]    |
 |       ($/barrel)                                           ---> [ 1 bbl NYMEX RBOB ]    |
 +-----------------------------------------------------------------------------------------+
-'''
+```
   ---
 
 ## 2. Market Ingestion & Settlement Metadata
@@ -75,11 +75,13 @@ The 3:2:1 spread is an **indicative gross margin benchmark**. A physical trading
 ---
 
 ## 5. Project Structure & Quickstart
+```
 .
 ├── crack.py                     # Dual-mode analytics pipeline
 ├── crack_spread_baseline.png    # Baseline equilibrium monitor output
 ├── crack_spread_stress-test.png # Extreme shock stress-test output
 └── README.md                    # Methodology and desk documentation
+```
 ### Usage
 
 ```bash

@@ -1,60 +1,86 @@
-# Refinery Crack Spread & Distillate Margin Analytics Engine
+# Dual-Mode 3:2:1 Refinery Crack Margin Engine
 
-An institutional-grade refinery margin analytics engine supporting both **Operational Baseline Monitoring** and **Geopolitical Shock Stress-Testing**, calibrated with official Bloomberg Terminal market settlement standards (`PX_LAST` / `BDP`).
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+An institutional-grade refinery margin analytics engine designed for energy trading desks and downstream analysts. It models the standardized **3:2:1 crack spread** across light sweet crude and secondary refined products under both **normalized market equilibrium** and **geopolitical supply-shock regimes**, calibrated against official Bloomberg Terminal settlement metadata (`PX_LAST` / `PX_SETTLE_LAST_DT`).
 
 ---
 
-## 1. Executive Summary & Dual Scenarios
+## 1. Executive Summary & Conversion Economics
 
-This analytics engine tracks downstream refinery conversion margins using the industry-standard **3:2:1 Crack Spread**:
-- **Feedstock**: 3 barrels of ICE Brent Crude (`CO1 Comdty`)
-- **Middle Distillates**: 2 barrels of NYMEX Ultra-Low Sulfur Diesel (`HO1 Comdty`)
-- **Light Distillates**: 1 barrel of NYMEX RBOB Gasoline (`XB1 Comdty`)
+The **3:2:1 crack spread** models the standard conversion margin of a complex distillation and catalytic cracking refinery:
 
-$$\text{Gross Margin}_{3:2:1} = \frac{2 \times P_{\text{Diesel}} + 1 \times P_{\text{Gasoline}} - 3 \times P_{\text{Brent}}}{3}$$
+$$\text{Gross Crack Margin}_{3:2:1} = \frac{2 \times P_{\text{ULSD}} + 1 \times P_{\text{RBOB}} - 3 \times P_{\text{Brent}}}{3}$$
 
-### Scenario A: Baseline Market Equilibrium (Operational Monitor)
-*Default operational run calibrated to normalized refining economics.*
-- **ICE Brent Crude**: $76.50 /bbl
-- **NYMEX ULSD Diesel**: 242.80 USd/gal ($101.98 /bbl) | Crack: `+$25.48/bbl`
-- **NYMEX RBOB Gasoline**: 218.40 USd/gal ($91.73 /bbl) | Crack: `+$15.23/bbl`
-- **3:2:1 Gross Margin**: **+$22.06 /bbl** (1Y Mean: **$25.57 /bbl**)
+* **Feedstock (3 Barrels)**: ICE Brent prompt futures benchmark (`CO1 Comdty`).
+* **Middle Distillates (2 Barrels)**: NYMEX Ultra-Low Sulfur Diesel (`HO1 Comdty`).
+* **Light Distillates (1 Barrel)**: NYMEX Reformulated Blendstock for Oxygenate Blending (`XB1 Comdty`).
+
+* +-----------------------------------------------------------------------------------------+
+|                                3:2:1 CRACK SPREAD ARCHITECTURE                          |
+|                                                                                         |
+|  [ 3 bbls ICE Brent Crude ]  ---> [ Refinery Conversion ] ---> [ 2 bbls NYMEX ULSD ]    |
+|       ($/barrel)                                           ---> [ 1 bbl NYMEX RBOB ]    |
++-----------------------------------------------------------------------------------------+
+
+  ---
+
+## 2. Market Ingestion & Settlement Metadata
+
+All terminal inputs are anchored directly to official **Bloomberg Terminal** futures settlement feeds (`PX_LAST` / `PX_SETTLE_LAST_DT`):
+
+| Commodity Benchmark | Bloomberg Ticker | Exchange | PX_LAST | Contract Quoting Unit | Normalized Price ($/bbl) | PX_SETTLE_LAST_DT |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **ICE Brent Crude** | `CO1 Comdty` | ICE | 116.72 | USD / bbl | \$116.72 | 2026-10-26 |
+| **NYMEX ULSD (Diesel)** | `HO1 Comdty` | NYMEX | 498.42 | USd / gal | \$209.34 | 2026-10-27 |
+| **NYMEX RBOB (Gasoline)** | `XB1 Comdty` | NYMEX | 321.16 | USd / gal | \$134.89 | 2026-10-27 |
+
+> **Exchange Settlement Note**: Settlement dates follow exchange-mandated contractual expiration and roll calendars (`PX_SETTLE_LAST_DT`), where NYMEX products and ICE crude adhere to respective official expiry conventions[cite: 2, 4].
+
+*Unit Harmonization*: Refined oil products are quoted in U.S. cents per gallon on NYMEX. Prices are converted to USD per barrel using the physical standard (42 US gallons per barrel):
+$$P_{\text{bbl}} = \left( \frac{P_{\text{cents/gal}}}{100} \right) \times 42$$
+
+---
+
+## 3. Operational Visualizations & Regimes
+
+### Regime A: Baseline Market Monitor
+Calibrated to normalized trading bands with stable throughput and balanced fuel distribution.
+- **3:2:1 Gross Margin**: `+$22.06 /bbl`
 
 ![Baseline Refinery Monitor](crack_spread_baseline.png)
 
----
+### Regime B: Geopolitical Supply Shock (Distillate Squeeze)
+Evaluates systemic secondary distillate dislocations (e.g., European embargoes, catalytic cracking unit outages) and margin elasticity.
+- **Stress-Test 3:2:1 Margin**: `+$67.80 /bbl`
 
-### Scenario B: Geopolitical Supply Shock (Bloomberg Terminal Actuals)
-*Calibrated directly from Bloomberg Terminal peak settlement records (`PX_LAST` / `PX_SETTLE_LAST_DT`) to evaluate distillate short squeezes and margin elasticities under severe supply cutoffs.*
-- **ICE Brent Crude**: $116.72 /bbl (`CO1 Comdty`)
-- **NYMEX ULSD Diesel**: 498.42 USd/gal ($209.34 /bbl) | Peak Crack: `+$92.62/bbl`
-- **NYMEX RBOB Gasoline**: 321.16 USd/gal ($134.89 /bbl) | Peak Crack: `+$18.17/bbl`
-- **Stress-Test 3:2:1 Margin**: **+$67.80 /bbl** (Peak Stress Mean: **$79.28 /bbl**)
-
-![Stress Test Monitor](crack_spread_stress-test.png)
+![Stress-Test Refinery Monitor](crack_spread_stress-test.png)
 
 ---
 
-## 2. Quantitative Normalization & Units
+## 4. Economic Rationale & Institutional Limitations
 
-Commodity contracts on NYMEX and ICE operate under different quoting conventions. The engine handles automated unit harmonization across exchanges:
-- **Crude (Brent)**: Quoted in `USD/bbl`. Direct input.
-- **Refined Products (ULSD & RBOB)**: Quoted in `cents/gal` (`USd/gal`).
-- **Conversion Formula**:
+### What Does an Expanding Crack Spread Imply?
+1. **Middle Distillate Tightness**: A surging diesel crack spread ($P_{\text{ULSD}} - P_{\text{Brent}}$) signals industrial and freight transport demand outpacing secondary conversion capacity or depleted regional inventories.
+2. **Refinery Utilization Incentives**: Wider cracks incentivize merchant refiners to maximize atmospheric distillation utilization until marginal feedstock costs and product gluts compress margins.
 
-$$P_{\text{bbl}} = \left( \frac{P_{\text{gal}}}{100} \right) \times 42$$
+### Why 3:2:1 Gross Crack $\neq$ Refinery Net Cash PnL
+The 3:2:1 spread is an **indicative gross margin benchmark**. A physical trading desk or merchant refiner evaluates net profitability by deducting key operational frictions:
+* **Operating Expenditures (OpEx)**: Typically \$4.00 – \$7.50 /bbl, heavily influenced by natural gas pricing for steam generation and catalytic hydrotreating (hydrogen production).
+* **Yield Slate Asymmetry**: Modern complex refineries (FCC, Delayed Coking, Hydrocracking) do not yield an exact 66.7% diesel / 33.3% gasoline output. They generate heavy residual fuel oil (VLSFO), petrochemical naphtha, and asphalt.
+* **Feedstock Quality Differentials**: Brent is light-sweet (API ~38°, Sulfur ~0.4%). Processing medium-sour barrels (e.g., Arab Light, Upper Zakum) requires applying Official Selling Price (OSP) differentials and sulfur-penalty operating adjustments.
 
 ---
-## 3. Project Structure & Usage
 
-```text
+## 5. Project Structure & Quickstart
 .
 ├── crack.py                     # Dual-mode analytics pipeline
-├── crack_spread_baseline.png    # Equilibrium monitor output
+├── crack_spread_baseline.png    # Baseline equilibrium monitor output
 ├── crack_spread_stress-test.png # Extreme shock stress-test output
 └── README.md                    # Methodology and desk documentation
 
-### Quickstart
+### Usage
 
 ```bash
 # Clone the repository
@@ -66,4 +92,3 @@ python crack.py --mode baseline
 
 # Run Bloomberg supply-shock stress test
 python crack.py --mode stress-test
-

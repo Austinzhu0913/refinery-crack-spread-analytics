@@ -18,7 +18,7 @@ $$\text{Gross Crack Margin}_{3:2:1} = \frac{2 \times P_{\text{ULSD}} + 1 \times 
 * **Light Distillates (1 Barrel)**: NYMEX Reformulated Blendstock for Oxygenate Blending (`XB1 Comdty`).
 
 ```
-* +-----------------------------------------------------------------------------------------+
++-----------------------------------------------------------------------------------------+
 |                                3:2:1 CRACK SPREAD ARCHITECTURE                          |
 |                                                                                         |
 |  [ 3 bbls ICE Brent Crude ]  ---> [ Refinery Conversion ] ---> [ 2 bbls NYMEX ULSD ]    |
